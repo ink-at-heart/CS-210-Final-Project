@@ -1,5 +1,4 @@
-# CPPSchoolProjects
-Corner Grocer Menu Project using C++
+# Corner Grocer Menu Project using C++
 
 This project was for creating a menu for a fictional grocery store for displaying the amount of different products purchased that day, as well as creating a backup file of the information at startup.
 <br><br>I did this by creating a function to print the menu options, then encapsulated the menu functionality in a do-while loop that stops iterating if the user inputs "4" (the Exit option). For the functionality of the different menu options, I used a switch-case statement to perform different actions based on whether the user input "1", "2", "3", or "4". 
