@@ -1,0 +1,117 @@
+#include <iostream>
+using namespace std;
+#include <string>
+#include <limits>
+#include <fstream>
+#include <map>
+#include <iomanip>
+
+//defining the function to print the menu display
+void printMenuOptions() {
+	cout << "CORNER GROCER DAILY PURCHASES" << endl;
+	cout << "1. Print frequency of purchases for a single product" << endl;
+	cout << "2. Print full list of products and their frequency of purchases" << endl;
+	cout << "3. Print histogram and frequency of purchases for all items" << endl;
+	cout << "4. Exit Program" << endl;
+	cout << "Enter number of desired option.";
+
+
+int main() {
+	ifstream inFS;
+	ofstream outFS;
+	ifstream inputFile("CS210_Project_Three_Input_File.txt")
+	ofstream backupFile("frequency.dat");
+	string item;
+	int userChoice;
+
+	//Opening the file with list of items
+	inputFile.open();
+
+	//testing that the file opened successfully
+	if (!inputFile.is_open()) {
+		cout << "Could not open file CS210_Project_Three_Input_File.txt." << endl;
+		return 1; // 1 indicates error
+	}
+
+	//Opening the file for backup output
+	backupFile.open();
+
+	//testing that the file opened successfully
+	if (!backupFile.is_open()) {
+		cout << "Could not open file frequency.dat." << endl;
+		return 1; // 1 indicates error
+	}
+
+	//Using a map to store each string and its frequency
+	map<string, int> frequencyMap;
+	string word;
+
+	//While loop that reads each item from the file until the end and counts its frequency in the file
+	while (inputFile >> word) {
+		frequencyMap[word]++;
+	}
+
+	//For loop to output frequency results of each item to the backup file
+	for (const auto& pair : frequencyMap) {
+		backupFile << pair.first << ": " << pair.second << "\n";
+	}
+
+
+	//do-while loop to iterate through the menu options until the user inputs '4' to Exit
+	do {
+		//Calling the function to print the menu for the user
+		printMenuOptions();
+		cin >> userChoice;
+
+		//switch-case statement to establish program actions based on the user's input
+		switch (userChoice) {
+
+		//Option 1: User inputs an item and the program retrieves the frequency of that item
+		case 1:
+			cin >> string item;
+			if (frequencyMap.find(item) != frequencyMap.end()) {
+				cout << item << " " << frequencyMap[item] << endl;
+			}
+			else {
+				cout << "The item " << item << " was not found." << endl;
+			}
+			cout << endl;
+			break;
+
+		//Option 2: Prints the entire list of items and their frequency of purchase
+		case 2:
+			for (const auto& pair : frequencyMap) {
+				cout << pair.first << " " << pair.second << endl;
+			}
+			cout << endl;
+			break;
+
+		//Option 3: Prints the frequency information as a histogram, using asterisks instead of numbers
+		case 3:
+			for (auto const& [word, count] : frequencyMap) {
+				cout << word << " ";
+				for (int i = 0; i < count; ++i) {
+					cout << "*";
+				}
+				cout << endl;
+			}
+			cout << endl;
+
+		//Option 4: Exits the program
+		case 4:
+			cout << "Exiting program... Goodbye!" << endl;
+			break;
+
+		//Default option for if the user inputs anything other than a number 1 through 4
+		default:
+			cout << "Error. Please input a number 1 through 4." << endl;
+		}
+	} while (userChoice != 4); //loop continues unless the user inputs '4' to exit the program.
+	}
+
+// Close files when finished to release system resources
+inputFile.close();
+backupFile.close();
+
+	return 0;
+}
